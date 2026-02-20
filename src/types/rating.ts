@@ -10,6 +10,8 @@ export interface Rating {
   rater: Rater;
   price?: number;
   photoUrl?: string;
+  photoPositionX?: number;
+  photoPositionY?: number;
   createdAt: string;
 }
 

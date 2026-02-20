@@ -15,6 +15,8 @@ function dbRowToRating(row: {
   rater: string;
   price: number | null;
   photo_url: string | null;
+  photo_position_x: number | null;
+  photo_position_y: number | null;
   created_at: string;
 }): Rating {
   return {
@@ -27,6 +29,8 @@ function dbRowToRating(row: {
     rater: row.rater as Rater,
     price: row.price ?? undefined,
     photoUrl: row.photo_url ?? undefined,
+    photoPositionX: row.photo_position_x ?? undefined,
+    photoPositionY: row.photo_position_y ?? undefined,
     createdAt: row.created_at,
   };
 }
@@ -42,6 +46,8 @@ function ratingToDbInsert(rating: Omit<Rating, 'id' | 'createdAt'>) {
     rater: rating.rater,
     price: rating.price ?? null,
     photo_url: rating.photoUrl ?? null,
+    photo_position_x: rating.photoPositionX ?? null,
+    photo_position_y: rating.photoPositionY ?? null,
   };
 }
 
@@ -137,6 +143,8 @@ export function useRatings() {
     if (updates.rater !== undefined) updateData.rater = updates.rater;
     if (updates.price !== undefined) updateData.price = updates.price;
     if (updates.photoUrl !== undefined) updateData.photo_url = updates.photoUrl;
+    if (updates.photoPositionX !== undefined) updateData.photo_position_x = updates.photoPositionX;
+    if (updates.photoPositionY !== undefined) updateData.photo_position_y = updates.photoPositionY;
 
     const { error: updateError } = await supabase
       .from('ratings')

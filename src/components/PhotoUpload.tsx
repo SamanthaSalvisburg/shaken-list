@@ -1,16 +1,25 @@
 import { useState, useRef } from 'react';
-import { Camera, X, Loader2 } from 'lucide-react';
+import { Camera, X, Loader2, Move } from 'lucide-react';
 import { uploadPhoto } from '../lib/photoUpload';
 
 interface PhotoUploadProps {
   value?: string;
   onChange: (url: string | undefined) => void;
+  photoPositionX?: number;
+  photoPositionY?: number;
+  onPositionChange?: (x: number, y: number) => void;
 }
 
-export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
+export function PhotoUpload({ value, onChange, photoPositionX = 50, photoPositionY = 50, onPositionChange }: PhotoUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [posX, setPosX] = useState(photoPositionX);
+  const [posY, setPosY] = useState(photoPositionY);
+  const [isDragging, setIsDragging] = useState(false);
+  const [hasDragged, setHasDragged] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragStart = useRef<{ clientX: number; clientY: number; posX: number; posY: number } | null>(null);
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -22,11 +31,14 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
     try {
       const result = await uploadPhoto(file);
       onChange(result.url);
+      // Reset position to center for new photo
+      setPosX(50);
+      setPosY(50);
+      onPositionChange?.(50, 50);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setIsUploading(false);
-      // Reset input so same file can be selected again
       if (inputRef.current) {
         inputRef.current.value = '';
       }
@@ -36,16 +48,66 @@ export function PhotoUpload({ value, onChange }: PhotoUploadProps) {
   const handleRemove = () => {
     onChange(undefined);
     setError(null);
+    setPosX(50);
+    setPosY(50);
+  };
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    containerRef.current?.setPointerCapture(e.pointerId);
+    dragStart.current = { clientX: e.clientX, clientY: e.clientY, posX, posY };
+    setIsDragging(true);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging || !dragStart.current || !containerRef.current) return;
+
+    const rect = containerRef.current.getBoundingClientRect();
+    const dx = e.clientX - dragStart.current.clientX;
+    const dy = e.clientY - dragStart.current.clientY;
+
+    // Convert pixel delta to percentage, invert direction (drag right = show more left = decrease x%)
+    const newX = Math.max(0, Math.min(100, dragStart.current.posX - (dx / rect.width) * 100));
+    const newY = Math.max(0, Math.min(100, dragStart.current.posY - (dy / rect.height) * 100));
+
+    setPosX(newX);
+    setPosY(newY);
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    containerRef.current?.releasePointerCapture(e.pointerId);
+    setIsDragging(false);
+    setHasDragged(true);
+    dragStart.current = null;
+    onPositionChange?.(posX, posY);
   };
 
   if (value) {
     return (
-      <div className="relative h-[120px] rounded-xl overflow-hidden">
+      <div
+        ref={containerRef}
+        className={`relative h-[120px] rounded-xl overflow-hidden select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      >
         <img
           src={value}
           alt="Rating photo"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover pointer-events-none"
+          style={{ objectPosition: `${posX}% ${posY}%` }}
+          draggable={false}
         />
+        {/* Drag hint — fades after first drag */}
+        {!hasDragged && (
+          <div className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-1.5 py-2 bg-gradient-to-t from-black/50 to-transparent pointer-events-none">
+            <Move className="w-3 h-3 text-white" />
+            <span className="text-white text-[11px] font-medium">Drag to reposition</span>
+          </div>
+        )}
+        {/* Remove button */}
         <button
           type="button"
           onClick={handleRemove}

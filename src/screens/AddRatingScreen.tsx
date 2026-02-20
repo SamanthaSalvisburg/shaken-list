@@ -18,6 +18,8 @@ interface AddRatingScreenProps {
     rater: Rater;
     price?: number;
     photoUrl?: string;
+    photoPositionX?: number;
+    photoPositionY?: number;
   }) => Promise<unknown>;
   onUpdate?: (id: string, updates: Partial<Rating>) => Promise<void>;
   getRating?: (id: string) => Rating | undefined;
@@ -59,6 +61,8 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
   const [raterMode, setRaterMode] = useState<RaterMode>(initialRaterMode);
   const [price, setPrice] = useState(existingRating?.price?.toString() || '');
   const [photoUrl, setPhotoUrl] = useState<string | undefined>(existingRating?.photoUrl);
+  const [photoPositionX, setPhotoPositionX] = useState(existingRating?.photoPositionX ?? 50);
+  const [photoPositionY, setPhotoPositionY] = useState(existingRating?.photoPositionY ?? 50);
   const [isSaving, setIsSaving] = useState(false);
 
   // S+K mode: separate ratings for Sam and Katie
@@ -109,6 +113,8 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
             tastingNotes,
             price: price ? parseFloat(price) : undefined,
             photoUrl,
+            photoPositionX,
+            photoPositionY,
           };
           await onUpdate(samId, { ...shared, rating: samRating, rater: 'Sam' });
           await onUpdate(katieId, { ...shared, rating: katieRating, rater: 'Katie' });
@@ -122,6 +128,8 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
             rater: getDbRater(),
             price: price ? parseFloat(price) : undefined,
             photoUrl,
+            photoPositionX,
+            photoPositionY,
           });
         }
         navigate(`/rating/${existingRating.id}`);
@@ -136,6 +144,8 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
           rater: 'Sam',
           price: price ? parseFloat(price) : undefined,
           photoUrl,
+          photoPositionX,
+          photoPositionY,
         });
         await onSave({
           barName,
@@ -146,6 +156,8 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
           rater: 'Katie',
           price: price ? parseFloat(price) : undefined,
           photoUrl,
+          photoPositionX,
+          photoPositionY,
         });
         navigate('/');
       } else {
@@ -158,6 +170,8 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
           rater: getDbRater(),
           price: price ? parseFloat(price) : undefined,
           photoUrl,
+          photoPositionX,
+          photoPositionY,
         });
         navigate('/');
       }
@@ -337,7 +351,13 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
             {/* Photo Upload */}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-ih-text dark:text-ih-text-dark">Photo</label>
-              <PhotoUpload value={photoUrl} onChange={setPhotoUrl} />
+              <PhotoUpload
+                value={photoUrl}
+                onChange={setPhotoUrl}
+                photoPositionX={photoPositionX}
+                photoPositionY={photoPositionY}
+                onPositionChange={(x, y) => { setPhotoPositionX(x); setPhotoPositionY(y); }}
+              />
             </div>
           </div>
         </div>

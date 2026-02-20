@@ -91,6 +91,7 @@ export function RatingDetailScreen({ getRating, ratings, onDelete }: RatingDetai
                 src={rating.photoUrl}
                 alt={`${rating.barName} espresso martini`}
                 className="w-full h-full object-cover"
+                style={{ objectPosition: `${rating.photoPositionX ?? 50}% ${rating.photoPositionY ?? 50}%` }}
               />
             </div>
           )}
