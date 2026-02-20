@@ -11,6 +11,7 @@ export default {
         'ih-accent': '#C67A52',
         'ih-accent-soft': 'rgba(198, 122, 82, 0.19)',
         'ih-accent-text': '#7A3F1E',
+        'ih-accent-text-dark': '#E8A882',
         'ih-bg': '#FAF8F4',
         'ih-bg-dark': '#1A1918',
         'ih-border': '#E5E2DC',

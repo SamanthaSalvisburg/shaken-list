@@ -24,10 +24,10 @@ export function RatingCard({ rating, onClick }: RatingCardProps) {
         <div className="text-base font-medium text-ih-text dark:text-ih-text-dark truncate">
           {rating.barName}
         </div>
-        <div className="text-sm text-ih-text-muted dark:text-ih-text-muted-dark group-hover:text-[#696560] dark:group-hover:text-ih-text-muted-dark truncate">
+        <div className="text-sm text-ih-text-muted dark:text-ih-text-muted-dark group-hover:text-[#696560] dark:group-hover:text-ih-text-secondary-dark truncate">
           {rating.location}
         </div>
-        <div className="text-sm text-ih-text-muted dark:text-ih-text-muted-dark group-hover:text-[#696560] dark:group-hover:text-ih-text-muted-dark">
+        <div className="text-sm text-ih-text-muted dark:text-ih-text-muted-dark group-hover:text-[#696560] dark:group-hover:text-ih-text-secondary-dark">
           {formatDate(rating.dateVisited)}
         </div>
       </div>

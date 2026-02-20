@@ -18,7 +18,7 @@ export function RaterBadge({ rater, size = 'sm', accent = false }: RaterBadgePro
     <span
       className={`rounded-lg font-medium ${sizeClasses[size]} ${
         useAccent
-          ? 'bg-ih-accent-soft text-ih-accent-text'
+          ? 'bg-ih-accent-soft text-ih-accent-text dark:text-ih-accent-text-dark'
           : 'bg-ih-surface-warm dark:bg-ih-surface-warm-dark text-ih-text-secondary dark:text-ih-text-secondary-dark'
       }`}
     >

@@ -275,7 +275,7 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
 
               {/* Sam Card */}
               <div className="flex items-center gap-3.5 rounded-[14px] bg-ih-surface-warm dark:bg-ih-surface-warm-dark border border-ih-border dark:border-ih-border-dark px-4 py-3.5">
-                <span className="rounded-lg bg-ih-accent-soft px-3 py-1 text-[13px] font-semibold text-ih-accent-text">
+                <span className="rounded-lg bg-ih-accent-soft px-3 py-1 text-[13px] font-semibold text-ih-accent-text dark:text-ih-accent-text-dark">
                   Sam
                 </span>
                 <StarRating
@@ -288,7 +288,7 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
 
               {/* Katie Card */}
               <div className="flex items-center gap-3.5 rounded-[14px] bg-ih-surface-warm dark:bg-ih-surface-warm-dark border border-ih-border dark:border-ih-border-dark px-4 py-3.5">
-                <span className="rounded-lg bg-ih-accent-soft px-3 py-1 text-[13px] font-semibold text-ih-accent-text">
+                <span className="rounded-lg bg-ih-accent-soft px-3 py-1 text-[13px] font-semibold text-ih-accent-text dark:text-ih-accent-text-dark">
                   Katie
                 </span>
                 <StarRating
