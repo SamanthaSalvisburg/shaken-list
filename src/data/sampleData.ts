@@ -1,0 +1,48 @@
+import { Rating } from '../types/rating';
+
+export const sampleRatings: Rating[] = [
+  {
+    id: '1',
+    barName: 'Dukes Bar',
+    location: "St. James's, London",
+    dateVisited: '2025-01-28',
+    rating: 5,
+    tastingNotes: 'Perfectly balanced with a rich coffee flavor and silky smooth texture. The foam on top was beautifully presented with three coffee beans. Strong espresso notes with hints of vanilla from the vodka. Served ice cold in a classic martini glass. One of the best we\'ve had!',
+    rater: 'Both',
+    price: 16,
+    createdAt: '2025-01-28T19:00:00Z',
+  },
+  {
+    id: '2',
+    barName: 'Nightjar',
+    location: 'Shoreditch',
+    dateVisited: '2025-01-21',
+    rating: 4,
+    tastingNotes: 'Creative twist on the classic. Slightly sweeter than traditional but the presentation was incredible. Live jazz made the experience magical.',
+    rater: 'Sam',
+    price: 18,
+    createdAt: '2025-01-21T20:30:00Z',
+  },
+  {
+    id: '3',
+    barName: 'Bar Termini',
+    location: 'Soho',
+    dateVisited: '2025-01-15',
+    rating: 4,
+    tastingNotes: 'Italian-style espresso martini with a beautiful crema. The coffee was freshly pulled and you could taste the difference. Intimate setting.',
+    rater: 'Both',
+    price: 14,
+    createdAt: '2025-01-15T18:00:00Z',
+  },
+  {
+    id: '4',
+    barName: 'Oriole',
+    location: 'Smithfield',
+    dateVisited: '2025-01-08',
+    rating: 3,
+    tastingNotes: 'Good but not exceptional. The venue was stunning - like stepping back in time. Cocktail was well-made but nothing special.',
+    rater: 'Katie',
+    price: 17,
+    createdAt: '2025-01-08T21:00:00Z',
+  },
+];
