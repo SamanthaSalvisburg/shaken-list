@@ -110,9 +110,9 @@ function sortGroupedRatings(ratings: GroupedRating[], sort: SortType): GroupedRa
       return sorted.sort((a, b) => avg(a) - avg(b) || b.dateVisited.localeCompare(a.dateVisited));
     }
     case 'sam':
-      return sorted.filter((r) => r.rater === 'Split' || r.rater === 'Sam');
+      return sorted.filter((r) => r.rater === 'Sam');
     case 'katie':
-      return sorted.filter((r) => r.rater === 'Split' || r.rater === 'Katie');
+      return sorted.filter((r) => r.rater === 'Katie');
     case 'both':
       return sorted.filter((r) => r.rater === 'Both');
     default:
