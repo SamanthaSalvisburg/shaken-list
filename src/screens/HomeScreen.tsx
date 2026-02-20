@@ -209,7 +209,7 @@ export function HomeScreen({ ratings, stats }: HomeScreenProps) {
                           setSort(option.value);
                           setSortOpen(false);
                         }}
-                        className="w-full flex items-center justify-between px-4 py-2.5 text-xs text-ih-text dark:text-ih-text-dark hover:bg-ih-surface-warm dark:hover:bg-ih-surface-warm-dark transition-colors"
+                        className="w-full flex items-center justify-between px-4 py-2.5 text-xs text-ih-text dark:text-ih-text-dark hover:bg-[#F5EFE9] dark:hover:bg-ih-surface-warm-dark transition-colors"
                       >
                         {option.label}
                         {sort === option.value && (

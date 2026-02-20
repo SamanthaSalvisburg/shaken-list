@@ -18,16 +18,16 @@ export function RatingCard({ rating, onClick }: RatingCardProps) {
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-center gap-4 px-4 py-5 text-left hover:bg-ih-surface-warm/50 dark:hover:bg-ih-surface-warm-dark/50 transition-colors"
+      className="group w-full flex items-center gap-4 px-4 py-5 text-left hover:bg-[#F5EFE9] dark:hover:bg-ih-surface-warm-dark/50 hover:border-l-[3px] hover:border-ih-accent hover:pl-[13px] dark:hover:border-ih-accent transition-all"
     >
       <div className="flex-1 min-w-0">
         <div className="text-base font-medium text-ih-text dark:text-ih-text-dark truncate">
           {rating.barName}
         </div>
-        <div className="text-sm text-ih-text-muted dark:text-ih-text-muted-dark truncate">
+        <div className="text-sm text-ih-text-muted dark:text-ih-text-muted-dark group-hover:text-[#696560] dark:group-hover:text-ih-text-muted-dark truncate">
           {rating.location}
         </div>
-        <div className="text-sm text-ih-text-muted dark:text-ih-text-muted-dark">
+        <div className="text-sm text-ih-text-muted dark:text-ih-text-muted-dark group-hover:text-[#696560] dark:group-hover:text-ih-text-muted-dark">
           {formatDate(rating.dateVisited)}
         </div>
       </div>
