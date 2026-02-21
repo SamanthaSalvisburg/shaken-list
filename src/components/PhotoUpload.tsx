@@ -87,7 +87,7 @@ export function PhotoUpload({ value, onChange, photoPositionX = 50, photoPositio
     return (
       <div
         ref={containerRef}
-        className={`relative h-[120px] rounded-xl overflow-hidden select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        className={`relative h-[200px] rounded-2xl overflow-hidden select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
