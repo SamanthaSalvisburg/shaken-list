@@ -221,7 +221,7 @@ export function HomeScreen({ ratings, stats }: HomeScreenProps) {
                 )}
               </div>
             </div>
-            <div className="bg-ih-surface dark:bg-ih-surface-dark rounded-2xl divide-y divide-ih-border dark:divide-ih-border-dark">
+            <div className="bg-ih-surface dark:bg-ih-surface-dark rounded-2xl divide-y overflow-hidden">
               {sortedRatings.length === 0 ? (
                 <div className="p-8 text-center text-ih-text-muted dark:text-ih-text-muted-dark">
                   No ratings yet. Add your first espresso martini!

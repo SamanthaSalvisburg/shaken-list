@@ -18,7 +18,7 @@ export function RatingCard({ rating, onClick }: RatingCardProps) {
   return (
     <button
       onClick={onClick}
-      className="group w-full flex items-center gap-4 px-4 py-5 text-left hover:bg-[#F5EFE9] dark:hover:bg-ih-surface-warm-dark/50 hover:border-l-[3px] hover:border-ih-accent hover:pl-[13px] dark:hover:border-ih-accent transition-all"
+      className="group w-full flex items-center gap-4 px-4 py-5 text-left border-ih-border dark:border-ih-border-dark hover:bg-[#F5EFE9] dark:hover:bg-ih-surface-warm-dark/50 hover:border-l-[3px] hover:border-l-ih-accent hover:pl-[13px] dark:hover:border-l-ih-accent transition-all"
     >
       <div className="flex-1 min-w-0">
         <div className="text-base font-medium text-ih-text dark:text-ih-text-dark truncate">
