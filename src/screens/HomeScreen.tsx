@@ -127,10 +127,17 @@ interface HomeScreenProps {
 
 export function HomeScreen({ ratings, stats }: HomeScreenProps) {
   const navigate = useNavigate();
-  const [filter, setFilter] = useState<FilterType>('All');
-  const [sort, setSort] = useState<SortType>('date');
+  const [filter, setFilter] = useState<FilterType>(
+    () => (sessionStorage.getItem('homeFilter') as FilterType) ?? 'All'
+  );
+  const [sort, setSort] = useState<SortType>(
+    () => (sessionStorage.getItem('homeSort') as SortType) ?? 'date'
+  );
   const [sortOpen, setSortOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { sessionStorage.setItem('homeFilter', filter); }, [filter]);
+  useEffect(() => { sessionStorage.setItem('homeSort', sort); }, [sort]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
