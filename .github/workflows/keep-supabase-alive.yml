@@ -2,8 +2,8 @@ name: Keep Supabase Active
 
 on:
   schedule:
-    # Runs every 4 days at 8:00 UTC
-    - cron: '0 8 */4 * *'
+    # Runs every 3 days at 8:00 UTC
+    - cron: '0 8 */3 * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
       - name: Ping Supabase
         run: |
           response=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/ratings?limit=1" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
           echo "Response code: $response"
