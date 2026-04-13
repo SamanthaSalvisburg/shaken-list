@@ -10,15 +10,20 @@ jobs:
   ping-supabase:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase
+      - name: Query Ratings Table
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ secrets.SUPABASE_URL }}/rest/v1/ratings?limit=1" \
-            -H "apikey: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}")
-          echo "Response code: $response"
-          if [ "$response" -ne 200 ]; then
-            echo "Ping failed with status $response"
+          response=$(curl -s -w "\n%{http_code}"             "${{ secrets.SUPABASE_URL }}/rest/v1/ratings?select=id&limit=1"             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}"             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n -1)
+          echo "Response code: $http_code"
+          echo "Response body: $body"
+          if [ "$http_code" -ne 200 ]; then
+            echo "Database query failed with status $http_code"
             exit 1
           fi
-          echo "Supabase project pinged successfully"
+          echo "Supabase database queried successfully"
+
+      - name: Ping Auth Service
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}"             "${{ secrets.SUPABASE_URL }}/auth/v1/health"             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}")
+          echo "Auth health check response: $response"
