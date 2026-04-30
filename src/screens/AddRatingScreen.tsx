@@ -59,7 +59,6 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
   const [rating, setRating] = useState(existingRating?.rating || 0);
   const [tastingNotes, setTastingNotes] = useState(existingRating?.tastingNotes || '');
   const [raterMode, setRaterMode] = useState<RaterMode>(initialRaterMode);
-  const [price, setPrice] = useState(existingRating?.price?.toString() || '');
   const [photoUrl, setPhotoUrl] = useState<string | undefined>(existingRating?.photoUrl);
   const [photoPositionX, setPhotoPositionX] = useState(existingRating?.photoPositionX ?? 50);
   const [photoPositionY, setPhotoPositionY] = useState(existingRating?.photoPositionY ?? 50);
@@ -111,7 +110,6 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
             location,
             dateVisited,
             tastingNotes,
-            price: price ? parseFloat(price) : undefined,
             photoUrl,
             photoPositionX,
             photoPositionY,
@@ -126,7 +124,6 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
             rating,
             tastingNotes,
             rater: getDbRater(),
-            price: price ? parseFloat(price) : undefined,
             photoUrl,
             photoPositionX,
             photoPositionY,
@@ -142,7 +139,6 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
           rating: samRating,
           tastingNotes,
           rater: 'Sam',
-          price: price ? parseFloat(price) : undefined,
           photoUrl,
           photoPositionX,
           photoPositionY,
@@ -154,7 +150,6 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
           rating: katieRating,
           tastingNotes,
           rater: 'Katie',
-          price: price ? parseFloat(price) : undefined,
           photoUrl,
           photoPositionX,
           photoPositionY,
@@ -168,7 +163,6 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
           rating,
           tastingNotes,
           rater: getDbRater(),
-          price: price ? parseFloat(price) : undefined,
           photoUrl,
           photoPositionX,
           photoPositionY,
@@ -213,7 +207,7 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
         <div className="bg-ih-surface dark:bg-ih-surface-dark rounded-2xl p-5 space-y-5">
           {/* Location - Now first with Places Autocomplete */}
           <div className="space-y-2">
-            <label className="text-sm font-semibold text-ih-text dark:text-ih-text-dark">Search bar or restaurant</label>
+            <label className="text-sm font-semibold text-ih-text dark:text-ih-text-dark">Location</label>
             <PlacesAutocomplete
               value={location}
               onChange={setLocation}
@@ -315,6 +309,18 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
             </div>
           )}
 
+          {/* Photo Upload */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-ih-text dark:text-ih-text-dark">Photo</label>
+            <PhotoUpload
+              value={photoUrl}
+              onChange={setPhotoUrl}
+              photoPositionX={photoPositionX}
+              photoPositionY={photoPositionY}
+              onPositionChange={(x, y) => { setPhotoPositionX(x); setPhotoPositionY(y); }}
+            />
+          </div>
+
           {/* Tasting Notes */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-ih-text dark:text-ih-text-dark">Tasting notes</label>
@@ -325,40 +331,6 @@ export function AddRatingScreen({ onSave, onUpdate, getRating, ratings }: AddRat
               rows={4}
               className="w-full px-4 py-3 rounded-xl border border-ih-border-strong dark:border-ih-border-strong-dark bg-transparent text-ih-text dark:text-ih-text-dark placeholder:text-ih-text-muted dark:placeholder:text-ih-text-muted-dark focus:outline-none focus:border-ih-accent resize-none"
             />
-          </div>
-        </div>
-
-        {/* Optional Section */}
-        <div className="space-y-3.5">
-          <h2 className="text-sm font-semibold text-ih-text dark:text-ih-text-dark">Optional</h2>
-          <div className="bg-ih-surface dark:bg-ih-surface-dark rounded-2xl p-5 space-y-5">
-            {/* Price */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-ih-text dark:text-ih-text-dark">Price</label>
-              <div className="flex items-center gap-2 px-4 py-3 rounded-xl border border-ih-border-strong dark:border-ih-border-strong-dark">
-                <span className="text-ih-text-muted dark:text-ih-text-muted-dark font-medium">$</span>
-                <input
-                  type="number"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  placeholder="0.00"
-                  step="0.01"
-                  className="flex-1 bg-transparent text-ih-text dark:text-ih-text-dark placeholder:text-ih-text-muted dark:placeholder:text-ih-text-muted-dark focus:outline-none"
-                />
-              </div>
-            </div>
-
-            {/* Photo Upload */}
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-ih-text dark:text-ih-text-dark">Photo</label>
-              <PhotoUpload
-                value={photoUrl}
-                onChange={setPhotoUrl}
-                photoPositionX={photoPositionX}
-                photoPositionY={photoPositionY}
-                onPositionChange={(x, y) => { setPhotoPositionX(x); setPhotoPositionY(y); }}
-              />
-            </div>
           </div>
         </div>
 
