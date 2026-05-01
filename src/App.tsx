@@ -3,6 +3,10 @@ import { useRatings } from './hooks/useRatings';
 import { HomeScreen } from './screens/HomeScreen';
 import { AddRatingScreen } from './screens/AddRatingScreen';
 import { RatingDetailScreen } from './screens/RatingDetailScreen';
+import { SearchScreen } from './screens/SearchScreen';
+import { MapScreen } from './screens/MapScreen';
+import { StatsScreen } from './screens/StatsScreen';
+import { NavLayout } from './components/NavLayout';
 
 function App() {
   const { ratings, isLoaded, error, addRating, updateRating, deleteRating, getRating, getStats } = useRatings();
@@ -25,10 +29,15 @@ function App() {
           </div>
         )}
         <Routes>
-          <Route
-            path="/"
-            element={<HomeScreen ratings={ratings} stats={getStats()} />}
-          />
+          <Route element={<NavLayout />}>
+            <Route
+              path="/"
+              element={<HomeScreen ratings={ratings} stats={getStats()} />}
+            />
+            <Route path="/search" element={<SearchScreen ratings={ratings} />} />
+            <Route path="/map" element={<MapScreen ratings={ratings} />} />
+            <Route path="/stats" element={<StatsScreen ratings={ratings} />} />
+          </Route>
           <Route
             path="/add"
             element={<AddRatingScreen onSave={addRating} />}

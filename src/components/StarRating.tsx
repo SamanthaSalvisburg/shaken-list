@@ -14,11 +14,22 @@ export function StarRating({ rating, size = 'sm', onChange, interactive = false 
     lg: 'w-7 h-7',
   };
 
-  const handleClick = (index: number) => {
-    if (interactive && onChange) {
-      onChange(index + 1);
-    }
-  };
+  if (!interactive) {
+    return (
+      <div className="flex gap-0.5" role="img" aria-label={`${rating} out of 5 stars`}>
+        {[0, 1, 2, 3, 4].map((index) => (
+          <Star
+            key={index}
+            className={`${sizeClasses[size]} ${
+              index < rating
+                ? 'fill-ih-accent text-ih-accent'
+                : 'fill-transparent text-ih-border dark:text-ih-border-dark'
+            }`}
+          />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-0.5">
@@ -26,9 +37,9 @@ export function StarRating({ rating, size = 'sm', onChange, interactive = false 
         <button
           key={index}
           type="button"
-          onClick={() => handleClick(index)}
-          disabled={!interactive}
-          className={`${interactive ? 'cursor-pointer hover:scale-110 transition-transform' : 'cursor-default'}`}
+          onClick={() => onChange?.(index + 1)}
+          aria-label={`Rate ${index + 1} ${index === 0 ? 'star' : 'stars'}`}
+          className="cursor-pointer hover:scale-110 transition-transform"
         >
           <Star
             className={`${sizeClasses[size]} ${
