@@ -90,6 +90,9 @@ export function MapScreen({ ratings }: MapScreenProps) {
   const mapRef = useRef<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.Marker[]>([]);
   const userMarkerRef = useRef<google.maps.Marker | null>(null);
+  // Tracks how the map was first centered. 'none' = not yet, 'bars' = fit to all bars
+  // (so userLoc can still override), 'user' = locked to user location.
+  const initialCenterMode = useRef<'none' | 'bars' | 'user'>('none');
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -194,6 +197,27 @@ export function MapScreen({ ratings }: MapScreenProps) {
     };
   }, [allPlaces]);
 
+  // Silently request the user's location on mount. If granted, we'll center on it.
+  // If denied or unavailable, we fall back to fitting all bars in the markers effect.
+  useEffect(() => {
+    if (!('geolocation' in navigator)) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setUserLoc({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => {/* permission denied or unavailable — fall back to bars-bounds */},
+      { timeout: 8000, maximumAge: 300000 }
+    );
+  }, []);
+
+  // When userLoc arrives, center on it. Overrides an earlier bars-fit (mode='bars'),
+  // but won't re-center if user has already been located once (mode='user').
+  useEffect(() => {
+    if (!mapRef.current || !userLoc) return;
+    if (initialCenterMode.current === 'user') return;
+    mapRef.current.setCenter(userLoc);
+    mapRef.current.setZoom(13);
+    initialCenterMode.current = 'user';
+  }, [userLoc]);
+
   // Render markers when visible places change
   useEffect(() => {
     if (!mapRef.current) return;
@@ -226,13 +250,16 @@ export function MapScreen({ ratings }: MapScreenProps) {
       plotted++;
     }
 
-    if (plotted > 0 && !selectedKey) {
+    // Only auto-fit to bars if we haven't centered the map yet. Once user-located
+    // or already bars-fit, leave the viewport alone so the user can pan freely.
+    if (plotted > 0 && !selectedKey && initialCenterMode.current === 'none') {
       if (plotted === 1) {
         mapRef.current.setCenter(bounds.getCenter());
         mapRef.current.setZoom(14);
       } else {
         mapRef.current.fitBounds(bounds, 80);
       }
+      initialCenterMode.current = 'bars';
     }
   }, [visiblePlaces, selectedKey]);
 
