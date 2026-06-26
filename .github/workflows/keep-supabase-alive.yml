@@ -9,7 +9,14 @@ on:
 jobs:
   ping-supabase:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
       - name: Query Ratings Table
         run: |
           response=$(curl -s -w "\n%{http_code}"             "${{ secrets.SUPABASE_URL }}/rest/v1/ratings?select=id&limit=1"             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}"             -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
@@ -27,3 +34,17 @@ jobs:
         run: |
           response=$(curl -s -o /dev/null -w "%{http_code}"             "${{ secrets.SUPABASE_URL }}/auth/v1/health"             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}")
           echo "Auth health check response: $response"
+
+      - name: Reset workflow inactivity timer
+        run: |
+          mkdir -p .github
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > .github/last-ping.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/last-ping.txt
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: keep-alive ping [skip ci]"
+            git push
+          fi
