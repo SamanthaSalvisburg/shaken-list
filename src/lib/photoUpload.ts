@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 
 const BUCKET_NAME = 'rating-photos';
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_ORIGINAL_FILE_SIZE = 25 * 1024 * 1024; // 25MB, before compression
 
 export interface UploadResult {
   url: string;
@@ -9,13 +10,18 @@ export interface UploadResult {
 }
 
 export async function uploadPhoto(file: File): Promise<UploadResult> {
-  // Validate file size
-  if (file.size > MAX_FILE_SIZE) {
-    throw new Error('File too large. Maximum size is 5MB.');
+  // Reject pathologically large originals before we try to decode them
+  if (file.size > MAX_ORIGINAL_FILE_SIZE) {
+    throw new Error('File too large. Maximum size is 25MB.');
   }
 
-  // Compress image before upload
+  // Compress image before validating size, since phone camera photos
+  // routinely start out larger than MAX_FILE_SIZE
   const compressedFile = await compressImage(file);
+
+  if (compressedFile.size > MAX_FILE_SIZE) {
+    throw new Error('File too large. Maximum size is 5MB.');
+  }
 
   // Generate unique filename
   const fileExt = file.name.split('.').pop() || 'jpg';
